@@ -43,12 +43,13 @@ export default {
 
 <template>
     <div class="container">
-        <h5 class="mt-4 fs-1">Form</h5>
+        <h5 class="mt-4 fs-1">Insert a Todo</h5>
         <form @submit.prevent="sendData(todo)">
             <Form :todo="todo" />
         </form>
+        <!-- Only for testing purposes -->
+        <hr />
+        <p v-if="todos.length" v-for="item in todos">{{ item }}</p>
     </div>
-    <hr />
-    <p>{{ todos }}</p>
 </template>
 
