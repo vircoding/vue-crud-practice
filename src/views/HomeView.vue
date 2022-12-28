@@ -1,5 +1,6 @@
 <script>
 import Form from '@/components/Form.vue';
+import Table from '@/components/Table.vue';
 import { mapActions } from 'vuex';
 import { nanoid } from 'nanoid';
 // Only for testing purposes
@@ -18,6 +19,7 @@ export default {
     },
     components: {
         Form,
+        Table,
     },
     methods: {
         ...mapActions(['setTodo']),
@@ -48,8 +50,8 @@ export default {
             <Form :todo="todo" />
         </form>
         <!-- Only for testing purposes -->
-        <hr />
-        <p v-if="todos.length" v-for="item in todos">{{ item }}</p>
+        <hr class="mt-5" />
+        <Table />
     </div>
 </template>
 
