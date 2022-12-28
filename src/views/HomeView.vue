@@ -22,12 +22,12 @@ export default {
         Table,
     },
     methods: {
-        ...mapActions(['setTodo']),
-        sendData(todo) {
+        ...mapActions(['setTodoAction']),
+        setTodo(todo) {
             // Generate Id
             this.todo.id = nanoid();
 
-            this.setTodo(todo);
+            this.setTodoAction(todo);
 
             // Restart Todo
             this.todo = {
@@ -46,7 +46,7 @@ export default {
 <template>
     <div class="container">
         <h5 class="mt-4 fs-1">Insert a Todo</h5>
-        <form @submit.prevent="sendData(todo)">
+        <form @submit.prevent="setTodo(todo)">
             <Form :todo="todo" />
         </form>
         <!-- Only for testing purposes -->

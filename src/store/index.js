@@ -13,10 +13,16 @@ export default createStore({
         setTodoMutation(state, payload) {
             state.todos.push(payload);
         },
+        deleteTodoMutation(state, payload) {
+            state.todos = state.todos.filter((item) => item.id !== payload);
+        },
     },
     actions: {
-        setTodo({ commit }, todo) {
+        setTodoAction({ commit }, todo) {
             commit('setTodoMutation', todo);
+        },
+        deleteTodoAction({ commit }, id) {
+            commit('deleteTodoMutation', id);
         },
     },
 });

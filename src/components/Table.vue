@@ -1,10 +1,13 @@
 <script>
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 export default {
     name: 'Table',
     computed: {
         ...mapState(['todos']),
+    },
+    methods: {
+        ...mapActions(['deleteTodoAction']),
     },
 };
 </script>
@@ -30,8 +33,14 @@ export default {
                         role="group"
                         aria-label="Small button group"
                     >
-                        <button type="button" class="btn btn-danger">Delete</button>
-                        <button type="button" class="btn btn-success">Edit</button>
+                        <button
+                            @click="deleteTodoAction(item.id)"
+                            type="button"
+                            class="btn btn-danger"
+                        >
+                            Delete
+                        </button>
+                        <router-link :to="`/${item.id}`" class="btn btn-success">Edit</router-link>
                     </div>
                 </td>
             </tr>
