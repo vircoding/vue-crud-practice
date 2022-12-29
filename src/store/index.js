@@ -13,15 +13,12 @@ export default createStore({
     mutations: {
         setTodoMutation(state, payload) {
             state.todos.push(payload);
-            localStorage.setItem('todos', JSON.stringify(state.todos));
         },
         deleteTodoMutation(state, payload) {
             state.todos = state.todos.filter((item) => item.id !== payload);
-            localStorage.setItem('todos', JSON.stringify(state.todos));
         },
         updateTodoMutation(state, payload) {
             state.todos = state.todos.map((item) => (item.id === payload.id ? payload : item));
-            localStorage.setItem('todos', JSON.stringify(state.todos));
             router.push('/');
         },
         loadDataMutation(state, payload) {
@@ -29,21 +26,74 @@ export default createStore({
         },
     },
     actions: {
-        setTodoAction({ commit }, todo) {
-            commit('setTodoMutation', todo);
-        },
-        deleteTodoAction({ commit }, id) {
-            commit('deleteTodoMutation', id);
-        },
-        updateTodoAction({ commit }, todo) {
-            commit('updateTodoMutation', todo);
-        },
-        loadDataAction({ commit }) {
-            if (localStorage.getItem('todos')) {
-                commit('loadDataMutation', JSON.parse(localStorage.getItem('todos')));
-                return;
+        async setTodoAction({ commit }, todo) {
+            try {
+                await fetch(
+                    `https://crud-practice-c1427-default-rtdb.firebaseio.com/todos/${todo.id}.json`,
+                    {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(todo),
+                    }
+                );
+                commit('setTodoMutation', todo);
+            } catch (error) {
+                console.error(error);
             }
-            localStorage.setItem('todos', JSON.stringify([]));
+        },
+        async deleteTodoAction({ commit }, id) {
+            try {
+                await fetch(
+                    `https://crud-practice-c1427-default-rtdb.firebaseio.com/todos/${id}.json`,
+                    {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    }
+                );
+                commit('deleteTodoMutation', id);
+            } catch (error) {}
+        },
+        async updateTodoAction({ commit }, todo) {
+            try {
+                await fetch(
+                    `https://crud-practice-c1427-default-rtdb.firebaseio.com/todos/${todo.id}.json`,
+                    {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(todo),
+                    }
+                );
+                commit('updateTodoMutation', todo);
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        async loadDataAction({ commit }) {
+            try {
+                const res = await fetch(
+                    'https://crud-practice-c1427-default-rtdb.firebaseio.com/todos.json',
+                    {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    }
+                );
+                const rawData = await res.json();
+                const data = [];
+                for (const key in rawData) {
+                    data.push(rawData[key]);
+                }
+                commit('loadDataMutation', data);
+            } catch (error) {
+                console.error(error);
+            }
         },
     },
 });
