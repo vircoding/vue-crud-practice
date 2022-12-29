@@ -6,6 +6,10 @@ import { nanoid } from 'nanoid';
 
 export default {
     name: 'HomeView',
+    components: {
+        Form,
+        Table,
+    },
     data() {
         return {
             todo: {
@@ -14,10 +18,6 @@ export default {
                 status: '',
             },
         };
-    },
-    components: {
-        Form,
-        Table,
     },
     methods: {
         ...mapActions(['setTodoAction']),
@@ -44,7 +44,6 @@ export default {
         <form @submit.prevent="setTodo(todo)">
             <Form :todo="todo" />
         </form>
-        <hr class="mt-5" />
         <Table />
     </div>
 </template>

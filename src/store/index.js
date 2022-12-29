@@ -13,13 +13,19 @@ export default createStore({
     mutations: {
         setTodoMutation(state, payload) {
             state.todos.push(payload);
+            localStorage.setItem('todos', JSON.stringify(state.todos));
         },
         deleteTodoMutation(state, payload) {
             state.todos = state.todos.filter((item) => item.id !== payload);
+            localStorage.setItem('todos', JSON.stringify(state.todos));
         },
         updateTodoMutation(state, payload) {
             state.todos = state.todos.map((item) => (item.id === payload.id ? payload : item));
+            localStorage.setItem('todos', JSON.stringify(state.todos));
             router.push('/');
+        },
+        loadDataMutation(state, payload) {
+            state.todos = payload;
         },
     },
     actions: {
@@ -31,6 +37,13 @@ export default createStore({
         },
         updateTodoAction({ commit }, todo) {
             commit('updateTodoMutation', todo);
+        },
+        loadDataAction({ commit }) {
+            if (localStorage.getItem('todos')) {
+                commit('loadDataMutation', JSON.parse(localStorage.getItem('todos')));
+                return;
+            }
+            localStorage.setItem('todos', JSON.stringify([]));
         },
     },
 });

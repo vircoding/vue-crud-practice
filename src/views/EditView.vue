@@ -35,7 +35,7 @@ export default {
             <span class="display-6">{{ todo.name }}</span>
             Todo:
         </h1>
-        <form @submit="updateTodoAction(todo)">
+        <form @submit.prevent="updateTodoAction(todo)">
             <Form :todo="todo" />
         </form>
     </div>
