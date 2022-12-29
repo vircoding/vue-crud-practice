@@ -30,7 +30,11 @@ export default {
 
 <template>
     <div class="container">
-        <h1 class="mt-4">Edit Todo View: {{ $route.params.id }}</h1>
+        <h1 class="mt-4">
+            Edit
+            <span class="display-6">{{ todo.name }}</span>
+            Todo:
+        </h1>
         <form @submit="updateTodoAction(todo)">
             <Form :todo="todo" />
         </form>

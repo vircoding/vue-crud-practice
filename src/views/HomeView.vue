@@ -40,7 +40,7 @@ export default {
 
 <template>
     <div class="container">
-        <h1 class="mt-4">Insert a Todo</h1>
+        <h1 class="mt-4 display-3">Insert a Todo</h1>
         <form @submit.prevent="setTodo(todo)">
             <Form :todo="todo" />
         </form>
