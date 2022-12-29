@@ -11,6 +11,7 @@ export default {
                 name: '',
                 status: '',
             },
+            name: '',
         };
     },
     components: {
@@ -24,6 +25,7 @@ export default {
     },
     created() {
         this.todo = this.todos.find((item) => item.id === this.$route.params.id);
+        this.name = this.todo.name;
     },
 };
 </script>
@@ -32,7 +34,7 @@ export default {
     <div class="container">
         <h1 class="mt-4">
             Edit
-            <span class="display-6">{{ todo.name }}</span>
+            <span class="display-6">{{ name }}</span>
             Todo:
         </h1>
         <form @submit.prevent="updateTodoAction(todo)">
