@@ -6,7 +6,7 @@ export default {
     },
     computed: {
         disableButton() {
-            return this.todo.name.length && this.todo.status;
+            return !(this.todo.name.length && this.todo.status);
         },
     },
 };
@@ -35,6 +35,6 @@ export default {
         <label class="form-check-label" for="relax"> Relax </label>
     </div>
     <div class="d-grid gap-2 mt-2">
-        <button class="btn btn-dark" type="submit" :disabled="!disableButton">Enter</button>
+        <button class="btn btn-dark" type="submit" :disabled="disableButton">Enter</button>
     </div>
 </template>

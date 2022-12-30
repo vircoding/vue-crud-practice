@@ -11,6 +11,11 @@ const routes = [
         name: 'edit',
         component: () => import('../views/EditView.vue'),
     },
+    {
+        path: '/signup',
+        name: 'signup',
+        component: () => import('../views/SignUpView.vue'),
+    },
 ];
 
 const router = createRouter({
