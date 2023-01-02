@@ -1,4 +1,6 @@
 <script>
+import { mapActions } from 'vuex';
+
 export default {
     name: 'SignUp',
     data() {
@@ -19,13 +21,22 @@ export default {
             return true;
         },
     },
+    methods: {
+        ...mapActions(['setUserAction']),
+        setUser() {
+            this.setUserAction({ email: this.email, password: this.password });
+            this.email = '';
+            this.password = '';
+            this.passwordReply = '';
+        },
+    },
 };
 </script>
 
 <template>
     <div class="container">
         <h1 class="mt-4">Insert a Todo</h1>
-        <form>
+        <form @submit.prevent="setUser">
             <input
                 type="email"
                 class="form-control"

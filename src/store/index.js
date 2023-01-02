@@ -9,6 +9,7 @@ export default createStore({
             name: '',
             state: '',
         },
+        user: null,
     },
     mutations: {
         setTodoMutation(state, payload) {
@@ -23,6 +24,9 @@ export default createStore({
         },
         loadDataMutation(state, payload) {
             state.todos = payload;
+        },
+        setUserMutation(state, payload) {
+            state.user = payload;
         },
     },
     actions: {
@@ -91,6 +95,28 @@ export default createStore({
                     data.push(rawData[key]);
                 }
                 commit('loadDataMutation', data);
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        async setUserAction({ commit }, user) {
+            try {
+                const apiKey = 'AIzaSyCt9DVb_Q_UEL7JB45VZ7nNAR_ga96mFAc';
+                const res = await fetch(
+                    `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(user),
+                    }
+                );
+                const dataDB = await res.json();
+                if (dataDB.error) {
+                    return console.error(dataDB.error);
+                }
+                commit('setUserMutation', dataDB);
             } catch (error) {
                 console.error(error);
             }
