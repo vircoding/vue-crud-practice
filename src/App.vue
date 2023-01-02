@@ -9,9 +9,6 @@ export default {
     methods: {
         ...mapActions(['loadDataAction']),
     },
-    created() {
-        this.loadDataAction();
-    },
 };
 </script>
 

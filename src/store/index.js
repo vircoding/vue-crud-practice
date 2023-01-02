@@ -27,13 +27,14 @@ export default createStore({
         },
         setUserMutation(state, payload) {
             state.user = payload;
+            router.push('/');
         },
     },
     actions: {
-        async setTodoAction({ commit }, todo) {
+        async setTodoAction({ commit, state }, todo) {
             try {
                 await fetch(
-                    `https://crud-practice-c1427-default-rtdb.firebaseio.com/todos/${todo.id}.json`,
+                    `https://crud-practice-c1427-default-rtdb.firebaseio.com/todos/${state.user.localId}/${todo.id}.json?auth=${state.user.idToken}`,
                     {
                         method: 'PUT',
                         headers: {
@@ -47,10 +48,10 @@ export default createStore({
                 console.error(error);
             }
         },
-        async deleteTodoAction({ commit }, id) {
+        async deleteTodoAction({ commit, state }, id) {
             try {
                 await fetch(
-                    `https://crud-practice-c1427-default-rtdb.firebaseio.com/todos/${id}.json`,
+                    `https://crud-practice-c1427-default-rtdb.firebaseio.com/todos/${state.user.localId}/${id}.json?auth=${state.user.idToken}`,
                     {
                         method: 'DELETE',
                         headers: {
@@ -61,10 +62,10 @@ export default createStore({
                 commit('deleteTodoMutation', id);
             } catch (error) {}
         },
-        async updateTodoAction({ commit }, todo) {
+        async updateTodoAction({ commit, state }, todo) {
             try {
                 await fetch(
-                    `https://crud-practice-c1427-default-rtdb.firebaseio.com/todos/${todo.id}.json`,
+                    `https://crud-practice-c1427-default-rtdb.firebaseio.com/todos/${state.user.localId}/${todo.id}.json?auth=${state.user.idToken}`,
                     {
                         method: 'PATCH',
                         headers: {
@@ -78,10 +79,10 @@ export default createStore({
                 console.error(error);
             }
         },
-        async loadDataAction({ commit }) {
+        async loadDataAction({ commit, state }) {
             try {
                 const res = await fetch(
-                    'https://crud-practice-c1427-default-rtdb.firebaseio.com/todos.json',
+                    `https://crud-practice-c1427-default-rtdb.firebaseio.com/todos/${state.user.localId}.json?auth=${state.user.idToken}`,
                     {
                         method: 'GET',
                         headers: {
@@ -99,7 +100,7 @@ export default createStore({
                 console.error(error);
             }
         },
-        async setUserAction({ commit }, user) {
+        async signUpUserAction({ commit }, user) {
             try {
                 const apiKey = 'AIzaSyCt9DVb_Q_UEL7JB45VZ7nNAR_ga96mFAc';
                 const res = await fetch(
@@ -109,7 +110,37 @@ export default createStore({
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify(user),
+                        body: JSON.stringify({
+                            email: user.email,
+                            password: user.password,
+                            returnSecureToken: true,
+                        }),
+                    }
+                );
+                const dataDB = await res.json();
+                if (dataDB.error) {
+                    return console.error(dataDB.error);
+                }
+                commit('setUserMutation', dataDB);
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        async loginUserAction({ commit }, user) {
+            try {
+                const apiKey = 'AIzaSyCt9DVb_Q_UEL7JB45VZ7nNAR_ga96mFAc';
+                const res = await fetch(
+                    `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            email: user.email,
+                            password: user.password,
+                            returnSecureToken: true,
+                        }),
                     }
                 );
                 const dataDB = await res.json();

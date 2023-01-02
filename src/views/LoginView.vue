@@ -2,32 +2,29 @@
 import { mapActions } from 'vuex';
 
 export default {
-    name: 'SignUp',
+    name: 'Login',
     data() {
         return {
             email: '',
             password: '',
-            passwordReply: '',
         };
     },
     computed: {
         disableButton() {
             if (
                 /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.email) &
-                (this.password.length >= 6) &
-                (this.password === this.passwordReply)
+                (this.password.length >= 6)
             )
                 return false;
             return true;
         },
     },
     methods: {
-        ...mapActions(['signUpUserAction']),
-        signUpUser() {
-            this.signUpUserAction({ email: this.email, password: this.password });
+        ...mapActions(['loginUserAction']),
+        loginUser() {
+            this.loginUserAction({ email: this.email, password: this.password });
             this.email = '';
             this.password = '';
-            this.passwordReply = '';
         },
     },
 };
@@ -35,8 +32,8 @@ export default {
 
 <template>
     <div class="container">
-        <h1 class="mt-4">Sign Up User</h1>
-        <form @submit.prevent="signUpUser">
+        <h1 class="mt-4">Login User</h1>
+        <form @submit.prevent="loginUser">
             <input
                 type="email"
                 class="form-control"
@@ -50,16 +47,8 @@ export default {
                 placeholder="Add a password"
                 v-model.trim="password"
             />
-            <input
-                type="password"
-                class="form-control mt-2"
-                placeholder="Repeat the password"
-                v-model.trim="passwordReply"
-            />
             <div class="d-grid gap-2 mt-2">
-                <button class="btn btn-dark" type="submit" :disabled="disableButton">
-                    Sign Up
-                </button>
+                <button class="btn btn-dark" type="submit" :disabled="disableButton">Login</button>
             </div>
         </form>
     </div>

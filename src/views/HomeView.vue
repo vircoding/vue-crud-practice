@@ -20,7 +20,7 @@ export default {
         };
     },
     methods: {
-        ...mapActions(['setTodoAction']),
+        ...mapActions(['setTodoAction', 'loadDataAction']),
         setTodo(todo) {
             // Generate Id
             this.todo.id = nanoid();
@@ -34,6 +34,9 @@ export default {
                 status: '',
             };
         },
+    },
+    created() {
+        this.loadDataAction();
     },
 };
 </script>
