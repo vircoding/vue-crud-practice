@@ -11,6 +11,11 @@ export default createStore({
         },
         user: null,
     },
+    getters: {
+        logedGetter(state) {
+            return !!state.user;
+        },
+    },
     mutations: {
         setTodoMutation(state, payload) {
             state.todos.push(payload);
@@ -27,7 +32,6 @@ export default createStore({
         },
         setUserMutation(state, payload) {
             state.user = payload;
-            router.push('/');
         },
     },
     actions: {
@@ -122,6 +126,7 @@ export default createStore({
                     return console.error(dataDB.error);
                 }
                 commit('setUserMutation', dataDB);
+                router.push('/');
             } catch (error) {
                 console.error(error);
             }
@@ -148,9 +153,14 @@ export default createStore({
                     return console.error(dataDB.error);
                 }
                 commit('setUserMutation', dataDB);
+                router.push('/');
             } catch (error) {
                 console.error(error);
             }
+        },
+        logoutUserAction({ commit }) {
+            commit('setUserMutation', null);
+            router.push('/login');
         },
     },
 });
