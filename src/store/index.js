@@ -84,6 +84,11 @@ export default createStore({
             }
         },
         async loadDataAction({ commit, state }) {
+            if (localStorage.getItem('user')) {
+                commit('setUserMutation', JSON.parse(localStorage.getItem('user')));
+            } else {
+                return commit('setUserMutation', null);
+            }
             try {
                 const res = await fetch(
                     `https://crud-practice-c1427-default-rtdb.firebaseio.com/todos/${state.user.localId}.json?auth=${state.user.idToken}`,
@@ -126,6 +131,7 @@ export default createStore({
                     return console.error(dataDB.error);
                 }
                 commit('setUserMutation', dataDB);
+                localStorage.setItem('user', JSON.stringify(dataDB));
                 router.push('/');
             } catch (error) {
                 console.error(error);
@@ -153,6 +159,7 @@ export default createStore({
                     return console.error(dataDB.error);
                 }
                 commit('setUserMutation', dataDB);
+                localStorage.setItem('user', JSON.stringify(dataDB));
                 router.push('/');
             } catch (error) {
                 console.error(error);
@@ -160,6 +167,7 @@ export default createStore({
         },
         logoutUserAction({ commit }) {
             commit('setUserMutation', null);
+            localStorage.removeItem('user');
             router.push('/login');
         },
     },
